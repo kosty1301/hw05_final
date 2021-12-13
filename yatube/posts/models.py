@@ -63,7 +63,8 @@ class Comment(CreatedModel):
         on_delete=models.CASCADE,
         related_name='comments'
     )
-    text = models.TextField('тест', max_length=400, help_text='Текст нового комментария')
+    text = models.TextField('тест', max_length=400,
+                            help_text='Текст нового комментария')
 
     class Meta:
         ordering = ('-created',)

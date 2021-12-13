@@ -104,7 +104,7 @@ class PostFormTest(TestCase):
         form_data = {
             'text': 'sdfsdfdsfds'
         }
-        response = self.not_authorized_client.post(
+        self.not_authorized_client.post(
             self.add_comment_url,
             data=form_data,
             follow=True
