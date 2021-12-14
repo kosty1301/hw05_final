@@ -78,11 +78,3 @@ class PostFormTest(TestCase):
         context = response.context['page_obj']
         if len(context) != 0:
             self.assertNotEqual(context[0].author, self.__class__.user)
-
-    def test_follow(self):
-        """USER может подписатся только один раз."""
-        author = User.objects.create(username='self_follow')
-        Follow.objects.create(author=author, user=self.user)
-        with self.assertRaises(IntegrityError) as context:
-            Follow.objects.create(author=author, user=self.user)
-        self.assertTrue('UNIQUE constraint failed' in str(context.exception))
