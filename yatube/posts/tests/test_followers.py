@@ -92,5 +92,3 @@ class PostFormTest(TestCase):
         with self.assertRaises(IntegrityError) as context:
             Follow.objects.create(author=user, user=self.user)
         self.assertTrue('UNIQUE constraint failed' in str(context.exception))
-
-

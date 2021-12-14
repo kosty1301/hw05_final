@@ -1,5 +1,3 @@
-import tempfile
-
 from django.test import TestCase
 
 from ..models import Post, Group, User, Comment, Follow
