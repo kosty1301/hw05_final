@@ -1,5 +1,7 @@
 from django.urls import reverse
 from django.test import Client, TestCase
+from django.db import IntegrityError
+
 from ..models import Post, User, Follow
 from.test_views import FOLLOW_URL
 
@@ -76,3 +78,19 @@ class PostFormTest(TestCase):
         context = response.context['page_obj']
         if len(context) != 0:
             self.assertNotEqual(context[0].author, self.__class__.user)
+
+    def test_no_self_follow(self):
+        """USER не может подписатся на самого себя."""
+        constraint_name = 'follow is not follower'
+        with self.assertRaisesMessage(IntegrityError, constraint_name):
+            Follow.objects.create(author=self.user, user=self.user)
+
+    def test_follow(self):
+        """USER может подписатся только один раз."""
+        user = User.objects.create(username='self_follow')
+        Follow.objects.create(author=user, user=self.user)
+        with self.assertRaises(IntegrityError) as context:
+            Follow.objects.create(author=user, user=self.user)
+        self.assertTrue('UNIQUE constraint failed' in str(context.exception))
+
+
