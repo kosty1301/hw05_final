@@ -80,15 +80,17 @@ class PostFormTest(TestCase):
             self.assertNotEqual(context[0].author, self.__class__.user)
 
     def test_no_self_follow(self):
+        user = User.objects.create(username='self')
         """USER не может подписатся на самого себя."""
         constraint_name = 'follow is not follower'
         with self.assertRaisesMessage(IntegrityError, constraint_name):
-            Follow.objects.create(author=self.user, user=self.user)
+            Follow.objects.create(author=user, user=user)
 
     def test_follow(self):
         """USER может подписатся только один раз."""
-        user = User.objects.create(username='self_follow')
-        Follow.objects.create(author=user, user=self.user)
+        author = User.objects.create(username='gfhfgh')
+        user = User.objects.create(username='ghfg')
+        Follow.objects.create(author=author, user=user)
         with self.assertRaises(IntegrityError) as context:
-            Follow.objects.create(author=user, user=self.user)
+            Follow.objects.create(author=author, user=user)
         self.assertTrue('UNIQUE constraint failed' in str(context.exception))
