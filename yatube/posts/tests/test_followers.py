@@ -79,18 +79,10 @@ class PostFormTest(TestCase):
         if len(context) != 0:
             self.assertNotEqual(context[0].author, self.__class__.user)
 
-    def test_no_self_follow(self):
-        user = User.objects.create(username='self')
-        """USER не может подписатся на самого себя."""
-        constraint_name = 'follow is not follower'
-        with self.assertRaisesMessage(IntegrityError, constraint_name):
-            Follow.objects.create(author=user, user=user)
-
     def test_follow(self):
         """USER может подписатся только один раз."""
-        author = User.objects.create(username='gfhfgh')
-        user = User.objects.create(username='ghfg')
-        Follow.objects.create(author=author, user=user)
+        author = User.objects.create(username='self_follow')
+        Follow.objects.create(author=author, user=self.user)
         with self.assertRaises(IntegrityError) as context:
-            Follow.objects.create(author=author, user=user)
+            Follow.objects.create(author=author, user=self.user)
         self.assertTrue('UNIQUE constraint failed' in str(context.exception))
