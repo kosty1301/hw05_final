@@ -1,6 +1,5 @@
 from django.urls import reverse
 from django.test import Client, TestCase
-from django.db import IntegrityError
 
 from ..models import Post, User, Follow
 from.test_views import FOLLOW_URL
