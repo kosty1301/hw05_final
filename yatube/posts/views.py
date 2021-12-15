@@ -129,7 +129,7 @@ def add_comment(request, post_id):
 def follow_index(request):
     user = request.user
     title = TITLE_DICT.get('index')
-    follow = Follow.objects.filter(user=user).all()
+    follow = user.follower.all()
     authors = [i.author for i in follow]
     posts = Post.objects.filter(author__in=authors)
     paginator = Paginator(posts, PAGE_COUNT)
